@@ -1,0 +1,87 @@
+﻿<Page x:Class="TestCaseGenerator.Question"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TestCaseGenerator"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+      Title="Question">
+    <Page.Resources>
+        <DataTemplate x:Key="SampleInput">
+            <StackPanel Margin="0,15" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="20" Background="White" Width="160" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" x:Name="txtblckSampleInput" Text="Sample Input 1"/>
+                    <Button x:Name="btnDeleteSampleInput" Margin="560,0" Content="Delete" Width="150" Height="40"/>
+                </StackPanel>
+                <StackPanel Margin="20,10" Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Margin="0,10" HorizontalAlignment="Left" Background="White" Width="100" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" Text="Input"/>
+                        <TextBox x:Name="txtboxInput" Width="450" Height="150" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Margin="30,0" Orientation="Vertical">
+                        <TextBlock Margin="0,10" HorizontalAlignment="Left" Background="White" Width="100" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" Text="Output"/>
+                        <TextBox x:Name="txtboxExpOutput" Width="450" Height="150" FontSize="16"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="White">
+        <TabControl Name="Tabs1" TabStripPlacement="Top" BorderBrush="Blue" Margin="10,10,0,5">
+            <TabItem Header="Question" IsSelected="True" Width="190" Height="40" FontSize="18" FontWeight="Bold">
+                <StackPanel Background="PaleGoldenrod" Margin="20" Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="20,10,690,0" Text="Question" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+                            <Button x:Name="btnClear" Content="Clear" Width="100" Height="40"/>
+                        </StackPanel>
+                        <TextBox Width="850" Height="250" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top"/>
+                    </StackPanel>
+                    <Button x:Name="btnAddSampleInput" Margin="750,15,0,0" Content="Add" Width="100" Height="40" FontSize="16"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ListBox  Name="lstboxSampleInput" Width="850" Margin="0,10" BorderThickness="0" Height="300" Background="Transparent">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                
+                                                    <StackPanel Margin="0,15" Orientation="Vertical">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Margin="20" Text="{Binding}" Background="White" Width="160" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" x:Name="txtblckSampleInput" />
+                                                            <Button x:Name="btnDeleteSampleInput" Margin="560,0" Content="Delete" Width="150" Height="40"/>
+                                                        </StackPanel>
+                                                        <StackPanel Margin="20,10" Orientation="Horizontal">
+                                                            <StackPanel Orientation="Vertical">
+                                                                <TextBlock Margin="0,10" HorizontalAlignment="Left" Background="White" Width="100" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" Text="Input"/>
+                                                                <TextBox x:Name="txtboxInput" Width="450" Height="150" FontSize="16"/>
+                                                            </StackPanel>
+                                                            <StackPanel Margin="30,0" Orientation="Vertical">
+                                                                <TextBlock Margin="0,10" HorizontalAlignment="Left" Background="White" Width="100" Height="40" Padding="0,9" TextAlignment="Center" FontSize="16" FontWeight="Bold" Text="Output"/>
+                                                                <TextBox x:Name="txtboxExpOutput" Width="450" Height="150" FontSize="16"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </ScrollViewer>
+                    
+
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Generate Test Case" Width="190" Height="40" FontSize="18" FontWeight="Bold"/>
+        </TabControl>
+    </Grid>
+</Page>
