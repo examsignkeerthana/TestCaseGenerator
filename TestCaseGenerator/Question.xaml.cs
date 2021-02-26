@@ -25,6 +25,10 @@ namespace TestCaseGenerator
     {
         public static string connectionString = "Properties.Settings.Default.database";
 
+        ObservableCollection<string> alternatelst = new ObservableCollection<string>();
+
+        ObservableCollection<string> challangelst = new ObservableCollection<string>();
+
         int topicId ;
         ObservableCollection<String> sample = new ObservableCollection<string>();
         public Question()
@@ -112,8 +116,28 @@ namespace TestCaseGenerator
             return id;
         }
 
-        private void InsertQuestion()
-        { }
+        private void InsertQuestion(string courseName, string topic, string Qstem,Status HasHint=(int)Status.NotAvailable,string hint="",Status HasChallange=(int)Status.NotAvailable,string challStem="",Status HasAlternate=(int)Status.NotAvailable,string AltStem="")
+        {
+            int id = GetTopicIdByTopicAndCourseName(courseName, topic);
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "insert into Question(TopicId,QuestionStem) values(" + id + ", '" + Qstem + "')";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
         private void InsertChallange(string courseName, string topic, string Ques, string stem)
         {
@@ -235,12 +259,46 @@ namespace TestCaseGenerator
             switch (index)
             {
                 case 0:
+                    stkpnlSample.Visibility = Visibility.Visible;
+                    stkpnlAlternate.Visibility = Visibility.Collapsed;
+                    stkpnlChallange.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
+                    stkpnlSample.Visibility = Visibility.Collapsed;
+                    stkpnlAlternate.Visibility = Visibility.Collapsed;
+                    stkpnlChallange.Visibility = Visibility.Visible;
                     break;
                 case 2:
+                    stkpnlSample.Visibility = Visibility.Collapsed;
+                    stkpnlAlternate.Visibility = Visibility.Visible;
+                    stkpnlChallange.Visibility = Visibility.Collapsed;
                     break;
             }
+        }
+
+        private void btnChallangeRemove_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            string s = btn.DataContext as string;
+            int index = challangelst.IndexOf(s);
+
+            challangelst.RemoveAt(index);
+        }
+
+        private void btnAddChallange_Click(object sender, RoutedEventArgs e)
+        {
+            challangelst.Add(txtboxChallangeStem.Text);
+            lstboxChallange.ItemsSource = challangelst;
+            txtboxChallangeStem.Text = "";
+            txtboxChallangeStem.Focus();
+        }
+
+        private void btnAddAlternate_Click(object sender, RoutedEventArgs e)
+        {
+            alternatelst.Add(txtboxAlternateStem.Text);
+            lstboxChallange.ItemsSource = alternatelst;
+            txtboxAlternateStem.Text = "";
+            txtboxAlternateStem.Focus();
         }
     }
 }
