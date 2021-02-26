@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
 
 namespace TestCaseGenerator
 {
@@ -20,29 +21,78 @@ namespace TestCaseGenerator
     /// </summary>
     public partial class SelectionPagr : Page
     {
-        List<Course> crs = new List<Course>();
+        //List<Course> crs = new List<Course>();
+        SortedList<string, List<string>> courseDetails = new SortedList<string, List<string>>();
+        public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
         public SelectionPagr()
         {
             InitializeComponent();
+            GetCourses();
+            cmboboxCourse.ItemsSource = courseDetails.Keys.ToList();
+            //cmboboxTopic.ItemsSource = courseDetails.Values.ToList();
+            //cmboboxTopic
+     
         }
 
-        private void AddCourses()
-        {
-            Course c = new Course();
-            c.course = "Programming";
-            c.topic = new List<string> { "Array","Operators","Basics","Conditional Statements"};
-            crs.Add(c);
-            Course c1 = new Course();
-            c1.course = "Machine Learning";
-            c1.topic = new List<string> { "NLP", "Basics", "Conditional Statements" };
-            crs.Add(c1);
-
-            
-        }
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
             //MainFrame.NavigationService.Navigate(new Question());
+        }
+
+        private void GetCourses()
+        {
+            List<string> crs = new List<string>();
+            try
+            {
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select distinct(CourseName) from CourseTopics";
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        crs.Add(dr.GetString(0));
+                    }
+
+                    con.Close();
+                }
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    for (int i = 0; i < crs.Count; i++)
+                    {
+                        List<string> topic = new List<string>();
+                        cmd.CommandText = "select distinct(Topic) from CourseTopics where CourseName='" + crs[i] + "'";
+                        SqlDataReader sqlDr = cmd.ExecuteReader();
+                        while (sqlDr.Read())
+                        {
+                            topic.Add(sqlDr.GetString(0));
+                        }
+                        courseDetails.Add(crs[i], topic);
+                    }
+
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+        }
+
+        private void cmboboxCourse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cmboboxTopic.ItemsSource=courseDetails[cmboboxCourse.SelectedItem.ToString()].ToList();
         }
     }
 }

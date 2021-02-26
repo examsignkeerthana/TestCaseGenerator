@@ -77,7 +77,7 @@ namespace TestCaseGenerator
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
 
             return id;
@@ -218,6 +218,29 @@ namespace TestCaseGenerator
             MessageBox.Show("File Generated");
 
             return filePath;
+        }
+
+        private void btnHint_Click(object sender, RoutedEventArgs e)
+        {
+            txtboxHint.Visibility = Visibility.Visible;
+            btnHint.IsEnabled = false;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            int index = int.Parse(((Button)e.Source).Uid);
+
+            gridCursor.Margin = new Thickness((10 + 335 * index), 0, 0, 0);
+
+            switch (index)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
         }
     }
 }
