@@ -59,7 +59,7 @@
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <TextBlock Margin="10,10,530,0" Text="Question" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
                     <Button Margin="0,0,10,0" Click="btnHint_Click" x:Name="btnHint" Content="Hint" Width="100" Height="40"/>
-                    <Button x:Name="btnClear" Content="Clear" Width="100" Height="40"/>
+                    <Button x:Name="btnClear" Click="btnClear_Click" Content="Clear" Width="100" Height="40"/>
                 </StackPanel>
                 <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10" Padding="2" Margin="0,10,0,0"
                                             HorizontalAlignment="Center" >

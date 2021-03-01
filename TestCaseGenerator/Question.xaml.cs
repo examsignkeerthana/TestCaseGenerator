@@ -98,10 +98,10 @@ namespace TestCaseGenerator
             return id;
         }
 
-        private int GetQuestionIdByTopicAndQuestion(string courseName, string topic, string Ques)
+        private int GetQuestionIdByTopicAndQuestion(int topicId, string Ques)
         {
 
-            int topicId =GetTopicIdByTopicAndCourseName(courseName,topic);
+           // int topicId =GetTopicIdByTopicAndCourseName(courseName,topic);
             int id = 0;
 
             try
@@ -259,9 +259,9 @@ namespace TestCaseGenerator
             }
         }
 
-        private void InsertChallange(string courseName, string topic, string Ques, string stem)
+        private void InsertChallange(int Qid, string stem)
         {
-            int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
+            //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
 
             try
             {
@@ -271,7 +271,7 @@ namespace TestCaseGenerator
                     cmd.Connection = con;
                     con.Open();
 
-                    cmd.CommandText = "insert into Challange(Qid, ChallangeStem) values(" + id + ", '" + stem + "')";
+                    cmd.CommandText = "insert into Challange(Qid, ChallangeStem) values(" + Qid + ", '" + stem + "')";
                     //var res = cmd.ExecuteScalar();
                     int res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -284,9 +284,9 @@ namespace TestCaseGenerator
 
         }
 
-        private void InsertAlternate(string courseName, string topic, string Ques, string stem)
+        private void InsertAlternate(int QuesId, string Ques, string stem)
         {
-            int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
+            //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
 
             try
             {
@@ -296,7 +296,7 @@ namespace TestCaseGenerator
                     cmd.Connection = con;
                     con.Open();
 
-                    cmd.CommandText = "insert into Alternate(Qid, AlternateStem) values(" + id + ", '" + stem + "')";
+                    cmd.CommandText = "insert into Alternate(Qid, AlternateStem) values(" + QuesId + ", '" + stem + "')";
                     //var res = cmd.ExecuteScalar();
                     int res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -308,9 +308,9 @@ namespace TestCaseGenerator
             }
         }
 
-        private void InsertTestCases(string courseName, string topic, string Ques, string inputpath,string outputpath)
+        private void InsertTestCases(int Qid, string inputpath,string outputpath)
         {
-            int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
+           // int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
             System.IO.FileStream Ipfs = new System.IO.FileStream(inputpath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
 
             BinaryReader br = new BinaryReader(Ipfs);
@@ -331,7 +331,7 @@ namespace TestCaseGenerator
                     cmd.Connection = con;
                     con.Open();
 
-                    cmd.CommandText = "insert into TestCases(Qid,Input,ExpectedOutput)values(" + id + ",'" + input + "','" + output + "')";
+                    cmd.CommandText = "insert into TestCases(Qid,Input,ExpectedOutput)values(" + Qid + ",'" + input + "','" + output + "')";
                     //var res = cmd.ExecuteScalar();
                     int res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -456,9 +456,16 @@ namespace TestCaseGenerator
                     }
                     break;
                 case 1:
+                    questionModel.Qid = GetQuestionIdByTopicAndQuestion(topicId, txtblckDisplayQues.Text);
                     for (int i = 0; i < challangelst.Count; i++)
                     {
-                        //if()
+                        InsertChallange(questionModel.Qid, challangelst[i]);
+
+                        if (HasChallange(questionModel.Qid))
+                        {
+                            UpdateChallange(questionModel.Qid, (int)Status.Available, challangelst[i]);
+                        }
+                        
                     }
                     break;
                 case 2:
@@ -467,5 +474,41 @@ namespace TestCaseGenerator
             
         }
 
+        private int GetMaxQuestionId()
+        {
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select count(*) from Challange";
+                    var res1 = cmd.ExecuteScalar();
+                    if (Convert.ToInt32(res1) > 0)
+                    {
+                        cmd.CommandText = "select max(ChallangeId) from Challange";
+                        var res = cmd.ExecuteScalar();
+                        id = Convert.ToInt32(res);
+                    }
+
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return id;
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            txtboxQuestion.Text = "";
+        }
     }
 }
