@@ -23,13 +23,15 @@ namespace TestCaseGenerator
     /// </summary>
     public partial class Question : Page
     {
-        public static string connectionString = "Properties.Settings.Default.database";
+        public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
 
         ObservableCollection<string> alternatelst = new ObservableCollection<string>();
 
         ObservableCollection<string> challangelst = new ObservableCollection<string>();
 
         int topicId ;
+        int btnId = 0;
+
         ObservableCollection<String> sample = new ObservableCollection<string>();
         public Question()
         {
@@ -38,7 +40,16 @@ namespace TestCaseGenerator
             string crs = "Foundations of Programming and Problem Solving";
             string topic = "Prime Numbers and Factors";
 
-           topicId= GetTopicIdByTopicAndCourseName(crs, topic);
+            topicId = GetTopicIdByTopicAndCourseName(crs, topic);
+
+            lstboxSampleInput.ItemsSource = sample;
+        }
+        public Question(string crs, string topic)
+        {
+            InitializeComponent();
+            sample.Add("Sample Input");
+
+            topicId = GetTopicIdByTopicAndCourseName(crs, topic);
 
             lstboxSampleInput.ItemsSource = sample;
         }
@@ -63,25 +74,25 @@ namespace TestCaseGenerator
         private int GetTopicIdByTopicAndCourseName(string courseName, string topic)
         {
             int id=0;
-
             try
             {
+
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = con;
                     con.Open();
-     
-                    cmd.CommandText = "select TopicId from CourseTopics where Topic='"+topic+"' and CourseName='"+courseName+"'";
+
+                    cmd.CommandText = "select TopicId from CourseTopics where Topic='" + topic + "' and CourseName='" + courseName + "'";
                     var res = cmd.ExecuteScalar();
                     id = int.Parse(res.ToString());
 
                     con.Close();
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(e.ToString());
             }
 
             return id;
@@ -116,9 +127,9 @@ namespace TestCaseGenerator
             return id;
         }
 
-        private void InsertQuestion(string courseName, string topic, string Qstem,Status HasHint=(int)Status.NotAvailable,string hint="",Status HasChallange=(int)Status.NotAvailable,string challStem="",Status HasAlternate=(int)Status.NotAvailable,string AltStem="")
+        private void InsertQuestion(int topicId, string Qstem,int HasHint=(int)Status.NotAvailable,string hint="",int HasChallange=(int)Status.NotAvailable,int ChallangeId=0,int HasAlternate=(int)Status.NotAvailable,int AltId=0)
         {
-            int id = GetTopicIdByTopicAndCourseName(courseName, topic);
+            //int id = GetTopicIdByTopicAndCourseName(courseName, topic);
             try
             {
                 using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
@@ -127,7 +138,116 @@ namespace TestCaseGenerator
                     cmd.Connection = con;
                     con.Open();
 
-                    cmd.CommandText = "insert into Question(TopicId,QuestionStem) values(" + id + ", '" + Qstem + "')";
+                    cmd.CommandText = "insert into Question (TopicId,QuestionStem,HasHint,Hint,HasChallange,ChallangeId,HasAlternate,AlternateId) values(" + topicId + ", '" + Qstem + "'," + HasHint + ",'" + hint + "'," + HasChallange + "," + ChallangeId + "," + HasAlternate + "," + AltId + ")";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+           
+        }
+
+        private bool HasChallange(int Qid)
+        {
+            bool flag = false;
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select HasChallange from Question where Qid=" + Qid + " ";
+                    var res = cmd.ExecuteScalar();
+                    id = int.Parse(res.ToString());
+
+                    if (id == 1)
+                    {
+                        flag = true;
+                    }
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return flag;
+        }
+
+        private bool HasAlternate( int Qid)
+        {
+            bool flag = false;
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select HasAlternate from Question where Qid=" + Qid + " ";
+                    var res = cmd.ExecuteScalar();
+                    id = int.Parse(res.ToString());
+
+                    if (id == 1)
+                    {
+                        flag = true;
+                    }
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return flag;
+        }
+
+        private void UpdateChallange(int Qid,int HasChallange, int ChallangeId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "update Question set HasChallange=" + HasChallange + " , ChallangeId=" + ChallangeId + " where Qid=" + Qid + "";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void UpdateAlternate(int Qid, int HasAlternate, int AlternateId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "update Question set HasAlternate=" + HasAlternate + " , AlternateId=" + AlternateId + " where Qid=" + Qid + "";
                     //var res = cmd.ExecuteScalar();
                     int res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -253,25 +373,39 @@ namespace TestCaseGenerator
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             int index = int.Parse(((Button)e.Source).Uid);
+            btnId = index;
 
             gridCursor.Margin = new Thickness((10 + 335 * index), 0, 0, 0);
 
             switch (index)
             {
                 case 0:
+                    
                     stkpnlSample.Visibility = Visibility.Visible;
                     stkpnlAlternate.Visibility = Visibility.Collapsed;
                     stkpnlChallange.Visibility = Visibility.Collapsed;
+
+                    stkpnlEnterQues.Visibility = Visibility.Visible;
+                    stkpnlDisplayQuestion.Visibility = Visibility.Collapsed;
+
                     break;
                 case 1:
                     stkpnlSample.Visibility = Visibility.Collapsed;
                     stkpnlAlternate.Visibility = Visibility.Collapsed;
                     stkpnlChallange.Visibility = Visibility.Visible;
+
+                    stkpnlEnterQues.Visibility = Visibility.Collapsed;
+                    stkpnlDisplayQuestion.Visibility = Visibility.Visible;
+
                     break;
                 case 2:
                     stkpnlSample.Visibility = Visibility.Collapsed;
                     stkpnlAlternate.Visibility = Visibility.Visible;
                     stkpnlChallange.Visibility = Visibility.Collapsed;
+
+                    stkpnlEnterQues.Visibility = Visibility.Collapsed;
+                    stkpnlDisplayQuestion.Visibility = Visibility.Visible;
+
                     break;
             }
         }
@@ -300,5 +434,38 @@ namespace TestCaseGenerator
             txtboxAlternateStem.Text = "";
             txtboxAlternateStem.Focus();
         }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            QuestionModel questionModel = new QuestionModel();
+            questionModel.QuestionStem = txtboxQuestion.Text;
+
+            switch (btnId)
+            {
+                case 0:
+                    if (btnHint.IsEnabled == false)
+                    {
+                        questionModel.Hint = txtboxHint.Text;
+                        questionModel.IsHint = (int)Status.Available;
+
+                        InsertQuestion(topicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint);
+                    }
+                    else
+                    {
+                        InsertQuestion(topicId, questionModel.QuestionStem);
+                    }
+                    break;
+                case 1:
+                    for (int i = 0; i < challangelst.Count; i++)
+                    {
+                        //if()
+                    }
+                    break;
+                case 2:
+                    break;
+            }
+            
+        }
+
     }
 }

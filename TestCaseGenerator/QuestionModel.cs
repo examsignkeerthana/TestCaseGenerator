@@ -14,15 +14,15 @@ namespace TestCaseGenerator
 
         public string QuestionStem { get; set; }
 
-        public Status IsHint { get; set; }
+        public int IsHint { get; set; }
 
         public string Hint { get; set; }
 
-        public Status HasChallange { get; set; }
+        public int HasChallange { get; set; }
 
         public int ChallangeId { get; set; }
 
-        public Status HasAlternate { get; set; }
+        public int HasAlternate { get; set; }
 
         public string AlternateId { get; set; }
     }

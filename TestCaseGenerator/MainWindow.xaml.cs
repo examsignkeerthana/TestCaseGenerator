@@ -25,5 +25,23 @@ namespace TestCaseGenerator
             InitializeComponent();
             MainFrame.NavigationService.Navigate(new SelectionPagr());
         }
+
+        //public MainWindow(string Course, string topic)
+        //{
+        //    var obj = new Question(Course, topic);
+        //    NavigationService.GetNavigationService(this).Navigate(obj);
+        //    //MainFrame.NavigationService.Navigate(new Question(Course,topic));
+        //}
+
+
+        private void btnSelectionFrame_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.NavigationService.Navigate(new SelectionPagr());
+        }
+
+        private void btnQuesFrame_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.NavigationService.Navigate(new Question());
+        }
     }
 }

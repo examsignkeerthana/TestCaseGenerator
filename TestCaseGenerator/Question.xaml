@@ -5,9 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:TestCaseGenerator"
       mc:Ignorable="d" 
-      d:DesignHeight="718" d:DesignWidth="1024"
+      d:DesignHeight="668" d:DesignWidth="1024"
       Title="Question">
-    <Page.Resources>
+    <Page.Resources >
 
         <DataTemplate x:Key="txtboxRemove" >
             <StackPanel Orientation="Horizontal">
@@ -55,7 +55,7 @@
         
         
         <StackPanel Grid.Row="1" Background="PaleGoldenrod" Margin="20" Orientation="Vertical">
-            <StackPanel Orientation="Vertical">
+            <StackPanel x:Name="stkpnlEnterQues" Orientation="Vertical">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                     <TextBlock Margin="10,10,530,0" Text="Question" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
                     <Button Margin="0,0,10,0" Click="btnHint_Click" x:Name="btnHint" Content="Hint" Width="100" Height="40"/>
@@ -63,16 +63,26 @@
                 </StackPanel>
                 <Border BorderThickness="1" BorderBrush="Black" CornerRadius="10" Padding="2" Margin="0,10,0,0"
                                             HorizontalAlignment="Center" >
-                    <TextBox Width="850" Height="100" TextWrapping="Wrap" FontSize="14" FontStyle="Normal" VerticalAlignment="Top" />
+                    <TextBox x:Name="txtboxQuestion" Width="850" Height="120" TextWrapping="Wrap" FontSize="14" FontStyle="Normal" VerticalAlignment="Top" />
                 </Border>
                 <TextBox x:Name="txtboxHint" Visibility="Collapsed" Margin="0,10,0,0" Width="850" Height="40" TextWrapping="Wrap" FontSize="14" VerticalAlignment="Top" />
             </StackPanel>
+
+            <StackPanel Visibility="Collapsed" x:Name="stkpnlDisplayQuestion" Orientation="Vertical">
+                <TextBlock Margin="10,10,530,0" Text="Question" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+                <TextBlock x:Name="txtblckDisplayQues" Width="850" TextWrapping="Wrap" Text="{Binding}" FontSize="16"/>
+                <TextBlock x:Name="txtblckDisplayHint" Width="850" TextWrapping="Wrap" Text="{Binding}" FontSize="16"/>
+            </StackPanel>
+
+            <ScrollViewer  HorizontalScrollBarVisibility="Disabled" Height="420">
+                <StackPanel Orientation="Vertical">
+
+                    <!--#region Sample Data-->
             
-         <!--#region Sample Data-->
-            <StackPanel x:Name="stkpnlSample" Visibility="Collapsed" Orientation="Vertical">
+            <StackPanel x:Name="stkpnlSample" Visibility="Visible" Orientation="Vertical">
                 <Button x:Name="btnAddSampleInput" Click="btnAddSampleInput_Click" Margin="730,15,0,0" Content="Add Sample" Width="120" Height="40" FontSize="16"/>
 
-                <ListBox  Name="lstboxSampleInput" Width="850" Height="350" Margin="0,10" BorderThickness="0" Background="Transparent">
+                <ListBox  Name="lstboxSampleInput" Width="850" Height="220" Margin="0,10" BorderThickness="0" Background="Transparent" >
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"/>
@@ -107,11 +117,13 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
-                
+
+               
+
             </StackPanel>
           <!--#endregion-->  
             
-          <!--#region Add Challange-->
+                    <!--#region Add Challange-->
             <StackPanel x:Name="stkpnlChallange" Visibility="Collapsed" Orientation="Vertical">
                 <Button x:Name="btnAddChallange" Click="btnAddChallange_Click" Margin="730,15,0,0" Content="Add Challange" Width="120" Height="40" FontSize="16"/>
 
@@ -134,7 +146,7 @@
             
             <!--#endregion-->
 
-            <!--#region Add Alternate-->
+                    <!--#region Add Alternate-->
             <StackPanel x:Name="stkpnlAlternate" Visibility="Collapsed" Orientation="Vertical">
                 <Button x:Name="btnAddAlternate" Click="btnAddAlternate_Click" Margin="730,15,0,0" Content="Add Alternate" Width="120" Height="40" FontSize="16"/>
 
@@ -156,6 +168,12 @@
             </StackPanel>
 
             <!--#endregion-->
+
+                    <Button Width="100" Height="40" x:Name="btnSave" Content="Save" Click="btnSave_Click" FontSize="20"/>
+
+                </StackPanel>
+
+        </ScrollViewer>
 
         </StackPanel>
     </Grid>

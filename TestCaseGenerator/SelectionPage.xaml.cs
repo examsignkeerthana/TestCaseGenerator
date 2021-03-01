@@ -37,6 +37,13 @@ namespace TestCaseGenerator
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
+            var obj = new Question(cmboboxCourse.SelectedItem.ToString(), cmboboxTopic.SelectedItem.ToString());
+            NavigationService.GetNavigationService(this).Navigate(obj);
+
+            //MainWindow nextwindow = new MainWindow(cmboboxCourse.SelectedItem.ToString(),cmboboxTopic.SelectedItem.ToString());
+
+            //nextwindow.Show();
+
             //MainFrame.NavigationService.Navigate(new Question());
         }
 
