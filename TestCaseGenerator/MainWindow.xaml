@@ -7,10 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1024">
     <Grid >
-        <StackPanel Orientation="Horizontal">
-            <Button VerticalAlignment="Top" Width="500" FontSize="24" Height="50" x:Name="btnSelectionFrame" Content="Course" Click="btnSelectionFrame_Click"/>
-            <Button VerticalAlignment="Top" Width="500" FontSize="24" x:Name="btnQuesFrame" Content="Course" Click="btnQuesFrame_Click" Height="50"/>
-        </StackPanel>
-        <Frame x:Name="MainFrame" Width="1024" Height="668"></Frame>
+        <Frame x:Name="MainFrame" Width="1024" Height="768"></Frame>
     </Grid>
 </Window>

@@ -38,23 +38,23 @@ namespace TestCaseGenerator
         public Status IsSample { get; set; }
     }
 
-    class Challange
-    {
-        public int Qid { get; set; }
+    //class Challange
+    //{
+    //    public int Qid { get; set; }
 
-        public int ChallangeId { get; set; }
+    //    public int ChallangeId { get; set; }
 
-        public String ChallangeStem { get; set; }
-    }
+    //    public String ChallangeStem { get; set; }
+    //}
 
-    class Alternate
-    {
-        public int Qid { get; set; }
+    //class Alternate
+    //{
+    //    public int Qid { get; set; }
 
-        public int AltId { get; set; }
+    //    public int AltId { get; set; }
 
-        public String AlternateStem { get; set; }
-    }
+    //    public String AlternateStem { get; set; }
+    //}
 
     enum Status
     {

@@ -25,9 +25,9 @@ namespace TestCaseGenerator
     {
         public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
 
-        ObservableCollection<string> alternatelst = new ObservableCollection<string>();
+        
 
-        ObservableCollection<string> challangelst = new ObservableCollection<string>();
+        
 
         int topicId ;
         int btnId = 0;
@@ -127,7 +127,7 @@ namespace TestCaseGenerator
             return id;
         }
 
-        private void InsertQuestion(int topicId, string Qstem,int HasHint=(int)Status.NotAvailable,string hint="",int HasChallange=(int)Status.NotAvailable,int ChallangeId=0,int HasAlternate=(int)Status.NotAvailable,int AltId=0)
+        private void InsertQuestion(int Qid,int topicId, string Qstem,int HasHint=(int)Status.NotAvailable,string hint="",int HasChallange=(int)Status.NotAvailable,int ChallangeId=0,int HasAlternate=(int)Status.NotAvailable,int AltId=0)
         {
             //int id = GetTopicIdByTopicAndCourseName(courseName, topic);
             try
@@ -138,7 +138,7 @@ namespace TestCaseGenerator
                     cmd.Connection = con;
                     con.Open();
 
-                    cmd.CommandText = "insert into Question (TopicId,QuestionStem,HasHint,Hint,HasChallange,ChallangeId,HasAlternate,AlternateId) values(" + topicId + ", '" + Qstem + "'," + HasHint + ",'" + hint + "'," + HasChallange + "," + ChallangeId + "," + HasAlternate + "," + AltId + ")";
+                    cmd.CommandText = "insert into Question (Qid,TopicId,QuestionStem,HasHint,Hint,HasChallange,ChallangeId,HasAlternate,AlternateId) values("+Qid+"," + topicId + ", '" + Qstem + "'," + HasHint + ",'" + hint + "'," + HasChallange + "," + ChallangeId + "," + HasAlternate + "," + AltId + ")";
                     //var res = cmd.ExecuteScalar();
                     int res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -259,30 +259,7 @@ namespace TestCaseGenerator
             }
         }
 
-        private void InsertChallange(int Qid, string stem)
-        {
-            //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "insert into Challange(Qid, ChallangeStem) values(" + Qid + ", '" + stem + "')";
-                    //var res = cmd.ExecuteScalar();
-                    int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
+        
 
         private void InsertAlternate(int QuesId, string Ques, string stem)
         {
@@ -382,26 +359,25 @@ namespace TestCaseGenerator
                 case 0:
                     
                     stkpnlSample.Visibility = Visibility.Visible;
-                    stkpnlAlternate.Visibility = Visibility.Collapsed;
-                    stkpnlChallange.Visibility = Visibility.Collapsed;
+                    //stkpnlAlternate.Visibility = Visibility.Collapsed;
+                    //stkpnlChallange.Visibility = Visibility.Collapsed;
 
                     stkpnlEnterQues.Visibility = Visibility.Visible;
+                    txtblckDisplayQues.Text = txtboxQuestion.Text;
+                    //if(hasHint(Qid))
+                    txtblckDisplayHint.Text = txtboxHint.Text;
                     stkpnlDisplayQuestion.Visibility = Visibility.Collapsed;
 
                     break;
                 case 1:
-                    stkpnlSample.Visibility = Visibility.Collapsed;
-                    stkpnlAlternate.Visibility = Visibility.Collapsed;
-                    stkpnlChallange.Visibility = Visibility.Visible;
-
-                    stkpnlEnterQues.Visibility = Visibility.Collapsed;
-                    stkpnlDisplayQuestion.Visibility = Visibility.Visible;
-
+                    //var obj = new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text));
+                    //NavigationService.GetNavigationService(this).Navigate(obj);
+                    QuesFrame.NavigationService.Navigate(new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text)));
                     break;
                 case 2:
                     stkpnlSample.Visibility = Visibility.Collapsed;
-                    stkpnlAlternate.Visibility = Visibility.Visible;
-                    stkpnlChallange.Visibility = Visibility.Collapsed;
+                    //stkpnlAlternate.Visibility = Visibility.Visible;
+                    //stkpnlChallange.Visibility = Visibility.Collapsed;
 
                     stkpnlEnterQues.Visibility = Visibility.Collapsed;
                     stkpnlDisplayQuestion.Visibility = Visibility.Visible;
@@ -410,63 +386,58 @@ namespace TestCaseGenerator
             }
         }
 
-        private void btnChallangeRemove_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = sender as Button;
-            string s = btn.DataContext as string;
-            int index = challangelst.IndexOf(s);
+        
 
-            challangelst.RemoveAt(index);
-        }
+        
 
-        private void btnAddChallange_Click(object sender, RoutedEventArgs e)
-        {
-            challangelst.Add(txtboxChallangeStem.Text);
-            lstboxChallange.ItemsSource = challangelst;
-            txtboxChallangeStem.Text = "";
-            txtboxChallangeStem.Focus();
-        }
+        //private void btnAddAlternate_Click(object sender, RoutedEventArgs e)
+        //{
+        //    alternatelst.Add(txtboxAlternateStem.Text);
+        //    //lstboxChallange.ItemsSource = alternatelst;
+        //    txtboxAlternateStem.Text = "";
+        //    txtboxAlternateStem.Focus();
+        //}
 
-        private void btnAddAlternate_Click(object sender, RoutedEventArgs e)
+        private int HasChallange()
         {
-            alternatelst.Add(txtboxAlternateStem.Text);
-            lstboxChallange.ItemsSource = alternatelst;
-            txtboxAlternateStem.Text = "";
-            txtboxAlternateStem.Focus();
+            int has = 0;
+            if (btnHint.IsEnabled == false)
+            { has = 1;
+                return has;
+            }
+
+            return has;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             QuestionModel questionModel = new QuestionModel();
             questionModel.QuestionStem = txtboxQuestion.Text;
+            questionModel.HasChallange = HasChallange();
+            questionModel.Hint = txtboxHint.Text;
 
             switch (btnId)
             {
                 case 0:
-                    if (btnHint.IsEnabled == false)
-                    {
-                        questionModel.Hint = txtboxHint.Text;
-                        questionModel.IsHint = (int)Status.Available;
-
-                        InsertQuestion(topicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint);
-                    }
-                    else
-                    {
-                        InsertQuestion(topicId, questionModel.QuestionStem);
-                    }
+                        InsertQuestion(GetMaxQuestionId()+1,topicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint);
+                        //insert sample testcases
                     break;
                 case 1:
-                    questionModel.Qid = GetQuestionIdByTopicAndQuestion(topicId, txtblckDisplayQues.Text);
-                    for (int i = 0; i < challangelst.Count; i++)
-                    {
-                        InsertChallange(questionModel.Qid, challangelst[i]);
 
-                        if (HasChallange(questionModel.Qid))
-                        {
-                            UpdateChallange(questionModel.Qid, (int)Status.Available, challangelst[i]);
-                        }
-                        
-                    }
+                    questionModel.Qid = GetQuestionIdByTopicAndQuestion(topicId, txtblckDisplayQues.Text);
+                    //for (int i = 0; i < challangelst.Count; i++)
+                    //{
+                    //    InsertChallange(questionModel.Qid, challangelst[i]);
+
+                    //    if (HasChallange(questionModel.Qid))
+                    //    {
+                    //        InsertQuestion(questionModel.Qid, questionModel.TopicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint, questionModel.HasChallange, GetMaxChallangeId());
+                    //    }
+                    //    else
+                    //    {
+                    //        UpdateChallange(questionModel.Qid, (int)Status.Available, GetMaxChallangeId());
+                    //    }
+                    //}
                     break;
                 case 2:
                     break;
@@ -475,6 +446,39 @@ namespace TestCaseGenerator
         }
 
         private int GetMaxQuestionId()
+        {
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select count(*) from Question";
+                    var res1 = cmd.ExecuteScalar();
+                    if (Convert.ToInt32(res1) > 0)
+                    {
+                        cmd.CommandText = "select max(Qid) from Question";
+                        var res = cmd.ExecuteScalar();
+                        id = Convert.ToInt32(res);
+                    }
+
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            return id;
+        }
+
+        private int GetMaxChallangeId()
         {
             int id = 0;
 
@@ -501,6 +505,7 @@ namespace TestCaseGenerator
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.ToString());
             }
 
             return id;
@@ -510,5 +515,6 @@ namespace TestCaseGenerator
         {
             txtboxQuestion.Text = "";
         }
+
     }
 }

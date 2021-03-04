@@ -55,7 +55,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Alternate.xaml.cs">
+      <DependentUpon>Alternate.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Challange.xaml.cs">
+      <DependentUpon>Challange.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Course.cs" />
+    <Compile Include="LandingWindow.xaml.cs">
+      <DependentUpon>LandingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Question.xaml.cs">
       <DependentUpon>Question.xaml</DependentUpon>
     </Compile>
@@ -63,6 +72,21 @@
     <Compile Include="SelectionPage.xaml.cs">
       <DependentUpon>SelectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TestCase.xaml.cs">
+      <DependentUpon>TestCase.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Alternate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Challange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LandingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,6 +104,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SelectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TestCase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
