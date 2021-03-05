@@ -261,29 +261,7 @@ namespace TestCaseGenerator
 
         
 
-        private void InsertAlternate(int QuesId, string Ques, string stem)
-        {
-            //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "insert into Alternate(Qid, AlternateStem) values(" + QuesId + ", '" + stem + "')";
-                    //var res = cmd.ExecuteScalar();
-                    int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
+       
 
         private void InsertTestCases(int Qid, string inputpath,string outputpath)
         {
@@ -347,48 +325,6 @@ namespace TestCaseGenerator
             btnHint.IsEnabled = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            int index = int.Parse(((Button)e.Source).Uid);
-            btnId = index;
-
-            gridCursor.Margin = new Thickness((10 + 335 * index), 0, 0, 0);
-
-            switch (index)
-            {
-                case 0:
-                    
-                    stkpnlSample.Visibility = Visibility.Visible;
-                    //stkpnlAlternate.Visibility = Visibility.Collapsed;
-                    //stkpnlChallange.Visibility = Visibility.Collapsed;
-
-                    stkpnlEnterQues.Visibility = Visibility.Visible;
-                    txtblckDisplayQues.Text = txtboxQuestion.Text;
-                    //if(hasHint(Qid))
-                    txtblckDisplayHint.Text = txtboxHint.Text;
-                    stkpnlDisplayQuestion.Visibility = Visibility.Collapsed;
-
-                    break;
-                case 1:
-                    //var obj = new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text));
-                    //NavigationService.GetNavigationService(this).Navigate(obj);
-                    QuesFrame.NavigationService.Navigate(new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text)));
-                    break;
-                case 2:
-                    stkpnlSample.Visibility = Visibility.Collapsed;
-                    //stkpnlAlternate.Visibility = Visibility.Visible;
-                    //stkpnlChallange.Visibility = Visibility.Collapsed;
-
-                    stkpnlEnterQues.Visibility = Visibility.Collapsed;
-                    stkpnlDisplayQuestion.Visibility = Visibility.Visible;
-
-                    break;
-            }
-        }
-
-        
-
-        
 
         //private void btnAddAlternate_Click(object sender, RoutedEventArgs e)
         //{

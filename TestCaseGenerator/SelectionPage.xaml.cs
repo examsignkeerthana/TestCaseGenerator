@@ -44,7 +44,7 @@ namespace TestCaseGenerator
 
             //nextwindow.Show();
 
-            //MainFrame.NavigationService.Navigate(new Question());
+            //MainFrame.NavigationService.Navigate(new LandingWindow());
         }
 
         private void GetCourses()

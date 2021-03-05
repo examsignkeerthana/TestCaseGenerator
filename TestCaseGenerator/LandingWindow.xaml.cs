@@ -23,5 +23,34 @@ namespace TestCaseGenerator
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+                int index = int.Parse(((Button)e.Source).Uid);
+                
+
+                gridCursor.Margin = new Thickness((10 + 335 * index), 0, 0, 0);
+
+                switch (index)
+                {
+                    case 0:
+                        
+                        
+                        break;
+                    case 1:
+
+                    var obj = new Question(cmboboxCourse.SelectedItem.ToString(), cmboboxTopic.SelectedItem.ToString());
+                    NavigationService.GetNavigationService(this).Navigate(obj);
+
+                    //var obj = new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text));
+                    //NavigationService.GetNavigationService(this).Navigate(obj);
+                    //QuesFrame.NavigationService.Navigate(new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text)));
+                    break;
+                    case 2:
+                        
+                        break;
+                
+            }
+        }
     }
 }

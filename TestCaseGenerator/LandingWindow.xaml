@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="LandingWindow" Height="768" Width="1024">
     <Grid>
+        <StackPanel Orientation="Vertical">
         <StackPanel Background="PaleGoldenrod" VerticalAlignment="Top" Height="45" Orientation="Vertical" Grid.Row="0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0">
                 <Button Uid="0" Click="Button_Click" FontSize="20" FontWeight="Bold" Width="335" Height="40" Content="QUESTION" BorderBrush="{x:Null}" Foreground="Brown" Background="{x:Null}"/>
@@ -14,8 +15,8 @@
                 <Button Uid="2" Click="Button_Click" FontSize="20" FontWeight="Bold" Width="335" Height="40" Content="ALTERNATE" BorderBrush="{x:Null}" Foreground="Brown" Background="{x:Null}"/>
             </StackPanel>
             <Grid x:Name="gridCursor" Width="335" Height="5" Margin="10,0" Background="Brown" HorizontalAlignment="Left"/>
-
         </StackPanel>
-
+            <Frame x:Name="QuesFrame" Width="1024" Height="718"></Frame>
+        </StackPanel>
     </Grid>
 </Window>

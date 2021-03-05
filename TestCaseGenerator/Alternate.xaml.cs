@@ -46,6 +46,30 @@ namespace TestCaseGenerator
             }
         }
 
+        private void InsertAlternate(int QuesId, string Ques, string stem)
+        {
+            //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "insert into Alternate(Qid, AlternateStem) values(" + QuesId + ", '" + stem + "')";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         private void btnChallangeRemove_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
