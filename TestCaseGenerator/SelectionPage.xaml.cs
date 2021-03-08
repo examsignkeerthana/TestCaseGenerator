@@ -21,6 +21,7 @@ namespace TestCaseGenerator
     /// </summary>
     public partial class SelectionPagr : Page
     {
+
         //List<Course> crs = new List<Course>();
         SortedList<string, List<string>> courseDetails = new SortedList<string, List<string>>();
         public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
@@ -29,15 +30,14 @@ namespace TestCaseGenerator
             InitializeComponent();
             GetCourses();
             cmboboxCourse.ItemsSource = courseDetails.Keys.ToList();
-            //cmboboxTopic.ItemsSource = courseDetails.Values.ToList();
-            //cmboboxTopic
-     
+            //cmboboxTopic.ItemsSource = courseDetails.Values.ToList();  
         }
 
 
         private void btnNext_Click(object sender, RoutedEventArgs e)
         {
-            var obj = new Question(cmboboxCourse.SelectedItem.ToString(), cmboboxTopic.SelectedItem.ToString());
+            
+            var obj = new LandingWindow(cmboboxCourse.SelectedItem.ToString(), cmboboxTopic.SelectedItem.ToString());
             NavigationService.GetNavigationService(this).Navigate(obj);
 
             //MainWindow nextwindow = new MainWindow(cmboboxCourse.SelectedItem.ToString(),cmboboxTopic.SelectedItem.ToString());

@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Data.SqlClient;
+using System.Windows.Navigation;
 
 namespace TestCaseGenerator
 {
@@ -19,9 +21,46 @@ namespace TestCaseGenerator
     /// </summary>
     public partial class LandingWindow : Window
     {
+        int topicId = 0;
+
+        public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
         public LandingWindow()
         {
             InitializeComponent();
+        }
+
+        public LandingWindow(string crs,string topic)
+        {
+            InitializeComponent();
+
+            topicId = GetTopicIdByTopicAndCourseName(crs, topic);
+        }
+
+        private int GetTopicIdByTopicAndCourseName(string courseName, string topic)
+        {
+            int id = 0;
+            try
+            {
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select TopicId from CourseTopics where Topic='" + topic + "' and CourseName='" + courseName + "'";
+                    var res = cmd.ExecuteScalar();
+                    id = int.Parse(res.ToString());
+
+                    con.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+
+            return id;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -34,21 +73,26 @@ namespace TestCaseGenerator
                 switch (index)
                 {
                     case 0:
-                        
-                        
-                        break;
-                    case 1:
 
-                    var obj = new Question(cmboboxCourse.SelectedItem.ToString(), cmboboxTopic.SelectedItem.ToString());
+                    var obj = new Question(topicId);
                     NavigationService.GetNavigationService(this).Navigate(obj);
+
+                    break;
+                    case 1:
+                    var obj1 = new Challange(topicId);
+                    NavigationService.GetNavigationService(this).Navigate(obj1);
+
 
                     //var obj = new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text));
                     //NavigationService.GetNavigationService(this).Navigate(obj);
                     //QuesFrame.NavigationService.Navigate(new Challange(GetQuestionIdByTopicAndQuestion(topicId, txtboxQuestion.Text)));
                     break;
                     case 2:
-                        
-                        break;
+
+                    var obj2 = new Alternate(topicId);
+                    NavigationService.GetNavigationService(this).Navigate(obj2);
+
+                    break;
                 
             }
         }

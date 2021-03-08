@@ -31,6 +31,7 @@ namespace TestCaseGenerator
         {
             InitializeComponent();
         }
+        //update Question for HasChallange
 
         public Challange(int qid)
         {
@@ -187,6 +188,61 @@ namespace TestCaseGenerator
                 MessageBox.Show(ex.Message);
             }
 
+        }
+
+        private void UpdateChallange(int Qid, int HasChallange, int ChallangeId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "update Question set HasChallange=" + HasChallange + " , ChallangeId=" + ChallangeId + " where Qid=" + Qid + "";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private int GetMaxChallangeId()
+        {
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select count(*) from Challange";
+                    var res1 = cmd.ExecuteScalar();
+                    if (Convert.ToInt32(res1) > 0)
+                    {
+                        cmd.CommandText = "select max(ChallangeId) from Challange";
+                        var res = cmd.ExecuteScalar();
+                        id = Convert.ToInt32(res);
+                    }
+
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            return id;
         }
     }
 }

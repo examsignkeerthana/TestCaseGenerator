@@ -44,12 +44,12 @@ namespace TestCaseGenerator
 
             lstboxSampleInput.ItemsSource = sample;
         }
-        public Question(string crs, string topic)
+        public Question(int id)
         {
             InitializeComponent();
             sample.Add("Sample Input");
 
-            topicId = GetTopicIdByTopicAndCourseName(crs, topic);
+            topicId = id;
 
             lstboxSampleInput.ItemsSource = sample;
         }
@@ -215,110 +215,11 @@ namespace TestCaseGenerator
             return flag;
         }
 
-        private void UpdateChallange(int Qid,int HasChallange, int ChallangeId)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "update Question set HasChallange=" + HasChallange + " , ChallangeId=" + ChallangeId + " where Qid=" + Qid + "";
-                    //var res = cmd.ExecuteScalar();
-                    int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void UpdateAlternate(int Qid, int HasAlternate, int AlternateId)
-        {
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "update Question set HasAlternate=" + HasAlternate + " , AlternateId=" + AlternateId + " where Qid=" + Qid + "";
-                    //var res = cmd.ExecuteScalar();
-                    int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        
+       
 
        
 
-        private void InsertTestCases(int Qid, string inputpath,string outputpath)
-        {
-           // int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
-            System.IO.FileStream Ipfs = new System.IO.FileStream(inputpath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-
-            BinaryReader br = new BinaryReader(Ipfs);
-            byte[] input = br.ReadBytes((Int32)Ipfs.Length);
-
-            System.IO.FileStream Opfs = new System.IO.FileStream(outputpath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-
-            BinaryReader reader = new BinaryReader(Opfs);
-            byte[] output = reader.ReadBytes((Int32)Opfs.Length);
-
-
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "insert into TestCases(Qid,Input,ExpectedOutput)values(" + Qid + ",'" + input + "','" + output + "')";
-                    //var res = cmd.ExecuteScalar();
-                    int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        public byte[] FileToByteArray(string fileName)
-        {
-            System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-
-            BinaryReader br = new BinaryReader(fs);
-            byte[] fileContent = br.ReadBytes((Int32)fs.Length);
-
-            return fileContent;
-        }
-
-        private string ByteArrayToFile(string bPath, string fName, byte[] content)
-        {
-            //Save the Byte Array as File.
-            string filePath = bPath + "\\" + fName;
-            File.WriteAllBytes(filePath, content);
-
-            MessageBox.Show("File Generated");
-
-            return filePath;
-        }
-
+       
         private void btnHint_Click(object sender, RoutedEventArgs e)
         {
             txtboxHint.Visibility = Visibility.Visible;
@@ -351,34 +252,9 @@ namespace TestCaseGenerator
             questionModel.QuestionStem = txtboxQuestion.Text;
             questionModel.HasChallange = HasChallange();
             questionModel.Hint = txtboxHint.Text;
+           
+            InsertQuestion(GetMaxQuestionId()+1,topicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint);
 
-            switch (btnId)
-            {
-                case 0:
-                        InsertQuestion(GetMaxQuestionId()+1,topicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint);
-                        //insert sample testcases
-                    break;
-                case 1:
-
-                    questionModel.Qid = GetQuestionIdByTopicAndQuestion(topicId, txtblckDisplayQues.Text);
-                    //for (int i = 0; i < challangelst.Count; i++)
-                    //{
-                    //    InsertChallange(questionModel.Qid, challangelst[i]);
-
-                    //    if (HasChallange(questionModel.Qid))
-                    //    {
-                    //        InsertQuestion(questionModel.Qid, questionModel.TopicId, questionModel.QuestionStem, questionModel.IsHint, questionModel.Hint, questionModel.HasChallange, GetMaxChallangeId());
-                    //    }
-                    //    else
-                    //    {
-                    //        UpdateChallange(questionModel.Qid, (int)Status.Available, GetMaxChallangeId());
-                    //    }
-                    //}
-                    break;
-                case 2:
-                    break;
-            }
-            
         }
 
         private int GetMaxQuestionId()
@@ -414,38 +290,7 @@ namespace TestCaseGenerator
             return id;
         }
 
-        private int GetMaxChallangeId()
-        {
-            int id = 0;
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(connectionString))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "select count(*) from Challange";
-                    var res1 = cmd.ExecuteScalar();
-                    if (Convert.ToInt32(res1) > 0)
-                    {
-                        cmd.CommandText = "select max(ChallangeId) from Challange";
-                        var res = cmd.ExecuteScalar();
-                        id = Convert.ToInt32(res);
-                    }
-
-
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            return id;
-        }
+       
 
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {

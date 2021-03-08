@@ -22,6 +22,7 @@ namespace TestCaseGenerator
     /// </summary>
     public partial class Alternate : Page
     {
+        public static string connectionString = @"Data Source=DESKTOP-JI48AUG\SQLEXPRESS;Initial Catalog=Coherence;Integrated Security=True";
         int quesId = 0;
         ObservableCollection<string> alternatelst = new ObservableCollection<string>();
         public Alternate()
@@ -33,8 +34,6 @@ namespace TestCaseGenerator
         {
             InitializeComponent();
             quesId = qid;
-
-            txtblckDisplayQues.Text = GetQuestionByQid(qid);
 
             if (HasHint(qid))
             {
@@ -94,36 +93,10 @@ namespace TestCaseGenerator
 
             for (int i = 0; i < alternatelst.Count; i++)
             {
-                InsertChallange(questionModel.Qid, alternatelst[i]);
+                InsertAlternate(questionModel.Qid, alternatelst[i]);
             }
         }
 
-        private string GetQuestionByQid(int qid)
-        {
-            string s = "";
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
-                {
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = con;
-                    con.Open();
-
-                    cmd.CommandText = "select QuestionStem from Question where Qid=" + qid + "";
-                    var res = cmd.ExecuteScalar();
-                    s = res.ToString();
-                    //int res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            return s;
-        }
 
         private bool HasHint(int qid)
         {
@@ -182,7 +155,7 @@ namespace TestCaseGenerator
             return s;
         }
 
-        private void InsertChallange(int Qid, string stem)
+        private void InsertAlternate(int Qid, string stem)
         {
             //int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
 
@@ -205,6 +178,61 @@ namespace TestCaseGenerator
                 MessageBox.Show(ex.Message);
             }
 
+        }
+
+        private int GetMaxAlternateId()
+        {
+            int id = 0;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "select count(*) from Challange";
+                    var res1 = cmd.ExecuteScalar();
+                    if (Convert.ToInt32(res1) > 0)
+                    {
+                        cmd.CommandText = "select max(AlternateId) from Challange";
+                        var res = cmd.ExecuteScalar();
+                        id = Convert.ToInt32(res);
+                    }
+
+
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            return id;
+        }
+
+        private void UpdateAlternate(int Qid, int HasAlternate, int AlternateId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "update Question set HasAlternate=" + 1 + " , AlternateId=" + AlternateId + " where Qid=" + Qid + "";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

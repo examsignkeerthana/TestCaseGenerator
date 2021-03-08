@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace TestCaseGenerator
 {
@@ -107,12 +108,6 @@ namespace TestCaseGenerator
             lstboxTestCase.ItemsSource = mylist;
         }
 
-        private void btnAddConstraint_Click(object sender, RoutedEventArgs e)
-        {
-            constraints.Add(txtboxConstraint.Text);
-            lstboxConstraint.ItemsSource = constraints;
-        }
-
         private void btnConstraintRemove_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -124,7 +119,90 @@ namespace TestCaseGenerator
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
+
+
+        //    private void InsertQuestion(int qid,byte[] input,byte[] output )
+        //{
+        //    //int id = GetTopicIdByTopicAndCourseName(courseName, topic);
+        //    try
+        //    {
+        //        using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+        //        {
+        //            SqlCommand cmd = new SqlCommand();
+        //            cmd.Connection = con;
+        //            con.Open();
+
+        //            cmd.CommandText = "insert into TestCases(Qid, Input, ExpectedOutput) values(" + qid + ",'" + input + "','" + output + "')";
+        //            //var res = cmd.ExecuteScalar();
+        //            int res = cmd.ExecuteNonQuery();
+        //            con.Close();
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        MessageBox.Show(e.ToString());
+        //    }
+
+        //}
+
+        private void InsertTestCases(int Qid, string inputpath, string outputpath)
+        {
+            // int id = GetQuestionIdByTopicAndQuestion(courseName, topic, Ques);
+            System.IO.FileStream Ipfs = new System.IO.FileStream(inputpath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+
+            BinaryReader br = new BinaryReader(Ipfs);
+            byte[] input = br.ReadBytes((Int32)Ipfs.Length);
+
+            System.IO.FileStream Opfs = new System.IO.FileStream(outputpath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+
+            BinaryReader reader = new BinaryReader(Opfs);
+            byte[] output = reader.ReadBytes((Int32)Opfs.Length);
+
+
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Properties.Settings.Default.database))
+                {
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = con;
+                    con.Open();
+
+                    cmd.CommandText = "insert into TestCases(Qid,Input,ExpectedOutput)values(" + Qid + ",'" + input + "','" + output + "')";
+                    //var res = cmd.ExecuteScalar();
+                    int res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+
+        public byte[] FileToByteArray(string fileName)
+        {
+            System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+
+            BinaryReader br = new BinaryReader(fs);
+            byte[] fileContent = br.ReadBytes((Int32)fs.Length);
+
+            return fileContent;
+        }
+
+        private string ByteArrayToFile(string bPath, string fName, byte[] content)
+        {
+            //Save the Byte Array as File.
+            string filePath = bPath + "\\" + fName;
+            File.WriteAllBytes(filePath, content);
+
+            MessageBox.Show("File Generated");
+
+            return filePath;
+        }
+
     }
 }

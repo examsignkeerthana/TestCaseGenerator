@@ -26,33 +26,33 @@
             
             <ScrollViewer Height="520" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="10,10,10,0" Text="No.Of.Parameter" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-                        <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxParameter"/>
-                        <Button Content="Add" Margin="20,0" Height="40" Width="120" x:Name="btnAddParam" Click="btnAddParam_Click" Background="SaddleBrown" Foreground="White" FontSize="16"/>             
-                    </StackPanel>
-                    <StackPanel Margin="20,0,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                        <TextBlock Margin="0,0" TextAlignment="Center" Text="Parameter Name" Width="120" Background="Transparent" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Margin="20,0" TextAlignment="Center" Text="Parameter Type" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Margin="20,0" TextAlignment="Center" Text="LowerBound" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Margin="20,0" TextAlignment="Center" Text="UpperBound" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Margin="20,0" TextAlignment="Center" Text="Remove" Width="120" Background="Transparent" FontSize="16" FontWeight="Bold"/>
-                    </StackPanel>
-                    
-                    <ListBox x:Name="lstboxParameter" BorderThickness="0" BorderBrush="Transparent" Background="Transparent" Width="950">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Margin="0,10" Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <StackPanel Margin="10,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <TextBox Margin="20,0" Width="120" Height="30" x:Name="txtboxParameterName"/>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="10,10,10,0" Text="No.Of.Parameter" Width="150" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+                            <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxParameter"/>
+                            <Button Content="Add" Margin="20,0" Height="30" Width="120" x:Name="btnAddParam" Click="btnAddParam_Click" Background="SaddleBrown" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Margin="20,0,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <TextBlock Margin="0,0" TextAlignment="Center" Text="Parameter Name" Width="120" Background="Transparent" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Margin="20,0" TextAlignment="Center" Text="Parameter Type" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Margin="20,0" TextAlignment="Center" Text="LowerBound" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Margin="20,0" TextAlignment="Center" Text="UpperBound" Width="150" Background="Transparent" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Margin="20,0" TextAlignment="Center" Text="Remove" Width="120" Background="Transparent" FontSize="16" FontWeight="Bold"/>
+                        </StackPanel>
+
+                        <ListBox x:Name="lstboxParameter" BorderThickness="0" BorderBrush="Transparent" Background="Transparent" Width="950">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Margin="0,10" Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <StackPanel Margin="10,0" HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBox Margin="20,0" Width="120" Height="30" x:Name="txtboxParameterName"/>
                                                     <ComboBox Margin="20,0" Height="30" Width="150" x:Name="cmboboxType" >
                                                         <ComboBoxItem Content="Integer"/>
                                                         <ComboBoxItem Content="Double"/>
@@ -61,38 +61,23 @@
                                                         <ComboBoxItem Content="Double[]"/>
                                                         <ComboBoxItem Content="String[]"/>
                                                     </ComboBox>
-                                                <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxLowerBound"/>
-                                                <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxUpperBound"/>
-                                                <Button Margin="20,0" x:Name="btnRemovePAram" Click="btnRemovePAram_Click" Width="120" Height="30" Content="Remove"/>
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="10,10,10,0" Text="Constraints" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
-                            <TextBox Margin="20,0" Width="300" Height="30" x:Name="txtboxConstraint"/>
-                            <Button Content="Add" Margin="20,0" Height="40" Width="120" x:Name="btnAddConstraint" Click="btnAddConstraint_Click" Background="SaddleBrown" Foreground="White" FontSize="16"/>
-                        </StackPanel>
-                        <ListBox HorizontalAlignment="Center" Background="Transparent" BorderThickness="0" Margin="0,20" BorderBrush="Transparent" Name="lstboxConstraint" ItemTemplate="{StaticResource txtboxRemove}" Width="900">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
+                                                    <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxLowerBound"/>
+                                                    <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxUpperBound"/>
+                                                    <Button Margin="20,0" x:Name="btnRemovePAram" Click="btnRemovePAram_Click" Width="120" Height="30" Content="Remove"/>
+                                                </StackPanel>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                         </ListBox>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="10,10,10,0" Text="No.Of.TestCase" Width="100" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
+                            <TextBlock Margin="10,10,10,0" Text="No.Of.TestCase" Width="150" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" FontWeight="Bold"/>
                             <TextBox Margin="20,0" Width="150" Height="30" x:Name="txtboxTestCase"/>
-                            <Button Content="Add" Margin="20,0" Height="40" Width="120" x:Name="btnAddTestCase" Click="btnAddTestCase_Click" Background="SaddleBrown" Foreground="White" FontSize="16"/>
+                            <Button Content="Add" Margin="20,0" Height="30" Width="120" x:Name="btnAddTestCase" Click="btnAddTestCase_Click" Background="SaddleBrown" Foreground="White" FontSize="16"/>
                         </StackPanel>
                         <ListBox Name="lstboxTestCase" Width="950" Margin="0,10" BorderThickness="0" Background="Transparent" >
                             <ListBox.ItemsPanel>
